@@ -3,7 +3,7 @@ import React from 'react'
 
 const Header = () => {
   return (
-    <div className='p-6 shadow-md border-b-2 flex justify-between items-center'>
+    <div className='p-6 shadow-md border-b-2 flex justify-between items-center bg-white'>
         <div className="flex items-center gap-2 rounded-md max-w-md p-2 border">
             <Search className="h-6 w-6" />
             <input type="text" placeholder='Search...' className="ml-2 outline-none" />
