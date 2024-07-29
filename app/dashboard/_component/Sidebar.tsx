@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import UsageTracker from "./UsageTracker";
 
 const MenuList = [
   {
@@ -22,8 +23,8 @@ const MenuList = [
     icon: WalletCards,
   },
   {
-    name: "Setting",
-    path: "/dashboard/setting",
+    name: "Settings",
+    path: "/dashboard/settings",
     icon: Settings,
   },
 ];
@@ -31,7 +32,7 @@ const MenuList = [
 function Sidebar() {
   const path = usePathname();
   return (
-    <div className="h-screen p-5 shadow-md border">
+    <div className="h-screen relative p-5 shadow-md border">
       <div className="flex justify-center">
         <Image src="/logo.svg" alt="logo" width={80} height={49} />
       </div>
@@ -53,6 +54,9 @@ function Sidebar() {
             </Link>
           );
         })}
+      </div>
+      <div className="absolute bottom-10 right-0 w-full">
+        <UsageTracker />
       </div>
     </div>
   );
