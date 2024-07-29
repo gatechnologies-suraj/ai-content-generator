@@ -3,15 +3,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Template } from "@/types/types";
+import { Loader2Icon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface Props {
   selectedTemplate?: Template;
-  setUserInputData: (data: any) => void;
+  userInputData: any;
+  isLoading: boolean;
 }
 
-const FormSection = ({ selectedTemplate, setUserInputData }: Props) => {
+const FormSection = ({
+  selectedTemplate,
+  isLoading,
+  userInputData
+}: Props) => {
   const [formData, setFormData] = useState<any>();
 
   const handleInputChange = (
@@ -22,7 +29,8 @@ const FormSection = ({ selectedTemplate, setUserInputData }: Props) => {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setUserInputData(formData);
+    userInputData(formData);
+    
   };
   return (
     <div className="p-5 border shadow-lg rounded-lg bg-white">
@@ -60,7 +68,12 @@ const FormSection = ({ selectedTemplate, setUserInputData }: Props) => {
             ) : null}
           </div>
         ))}
-        <Button type="submit" className="w-full py-6 text-md">
+        <Button
+          disabled={isLoading}
+          type="submit"
+          className="w-full py-6 text-md flex items-center gap-2"
+        >
+          {isLoading && <Loader2Icon className="animate-spin" />}
           Generate Content
         </Button>
       </form>
