@@ -6,12 +6,13 @@ import { db } from "@/utils/db";
 import { AIOutput } from "@/utils/schema";
 import { useUser } from "@clerk/nextjs";
 import { eq } from "drizzle-orm";
-import React, { useContext, useEffect, useState } from "react";
+import Link from "next/link";
+import React, { useContext, useEffect } from "react";
 
 const UsageTracker = () => {
   const { user } = useUser();
   const { totalUsage, setTotalUsage } = useContext(TotalUsageContext);
-  const {updateCredit, setUpdateCredit} = useContext(UpdateCreditContext);
+  const { updateCredit } = useContext(UpdateCreditContext);
 
   const getData = async () => {
     const result = await db
@@ -25,20 +26,34 @@ const UsageTracker = () => {
   };
 
   const getTotalUsage = (result: any) => {
-    let totalUsage = 0;
+    let newTotalUsage = 0;
     result.forEach((item: any) => {
-      totalUsage += item?.aiResponse?.length;
+      newTotalUsage += item?.aiResponse?.length;
     });
-    setTotalUsage(totalUsage);
+    // Ensure total usage does not exceed 10,000
+    setTotalUsage((prevTotalUsage: any) => {
+      const updatedUsage = prevTotalUsage + newTotalUsage;
+      return updatedUsage > 10000 ? 10000 : updatedUsage;
+    });
   };
 
   useEffect(() => {
-    user && getData();
+    if (user) {
+      getData();
+    }
   }, [user]);
 
   useEffect(() => {
-    user && getData();
+    if (user) {
+      getData();
+    }
   }, [updateCredit, user]);
+
+  useEffect(() => {
+    if (totalUsage > 10000) {
+      alert("You have exceeded your credit limit!");
+    }
+  }, [totalUsage]);
 
   return (
     <div className="m-5">
@@ -52,9 +67,11 @@ const UsageTracker = () => {
         </div>
         <h2 className="text-sm my-2">{totalUsage}/10,000 Credit Used!</h2>
       </div>
+      <Link href="/dashboard/billing">
       <Button className="mt-5 bg-gray-100 hover:bg-gray-200 text-primary w-full">
         Upgrade
       </Button>
+      </Link>
     </div>
   );
 };

@@ -60,45 +60,45 @@ const Page = () => {
       ) : error ? (
         <div className="text-red-500">{error}</div>
       ) : data && data.length > 0 ? (
-        <table className="w-full border-collapse shadow-xl bg-white">
-          <thead>
-            <tr className="bg-gray-200 text-gray-700">
-              <th className="border-b p-4 text-left font-semibold">TEMPLATE</th>
-              <th className="border-b p-4 text-left font-semibold">AIRESP</th>
-              <th className="border-b p-4 text-left font-semibold">DATE</th>
-              <th className="border-b p-4 text-left font-semibold">WORDS</th>
-              <th className="border-b p-4 text-left font-semibold">COPY</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item: any) => (
-              <tr key={item.id} className="hover:bg-gray-100">
-                <td className="border-b p-4">{item.templateSlug}</td>
-                <td className="border-b p-4">
-                  {item.aiResponse.slice(0, 50)}...
-                </td>
-                <td className="border-b p-4">{item.createdAt}</td>
-                <td className="border-b p-4">{item.formData.length}</td>
-                <td className="border-b p-4 flex items-center">
-                  <Button
-                    className=" text-white px-2 py-1 rounded "
-                    onClick={() =>
-                      handleCopy(
-                        `${item.templateSlug}\n${item.aiResponse}\n${item.createdAt}`,
-                        item.id
-                      )
-                    }
-                  >
-                    Copy
-                  </Button>
-                  {copiedId === item.id && (
-                    <Check className="ml-2 text-green-500" />
-                  )}
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse shadow-xl bg-white">
+            <thead>
+              <tr className="bg-gray-200 text-gray-700">
+                <th className="border-b p-4 text-left font-semibold">TEMPLATE</th>
+                <th className="border-b p-4 text-left font-semibold">AIRESP</th>
+                <th className="border-b p-4 text-left font-semibold">DATE</th>
+                <th className="border-b p-4 text-left font-semibold">WORDS</th>
+                <th className="border-b p-4 text-left font-semibold">COPY</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.map((item: any) => (
+                <tr key={item.id} className="hover:bg-gray-100">
+                  <td className="border-b p-4">{item.templateSlug}</td>
+                  <td className="border-b p-4">{item.aiResponse.slice(0, 50)}...</td>
+                  <td className="border-b p-4">{item.createdAt}</td>
+                  <td className="border-b p-4">{item.aiResponse.length}</td>
+                  <td className="border-b p-4 flex items-center">
+                    <Button
+                      className=" text-white px-2 py-1 rounded "
+                      onClick={() =>
+                        handleCopy(
+                          `${item.templateSlug}\n${item.aiResponse}\n${item.createdAt}`,
+                          item.id
+                        )
+                      }
+                    >
+                      Copy
+                    </Button>
+                    {copiedId === item.id && (
+                      <Check className="ml-2 text-green-500" />
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <div className="text-center text-gray-600">No history found!</div>
       )}

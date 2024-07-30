@@ -35,34 +35,50 @@ const CreateContent = (props: Props) => {
   );
 
   const GenerateAiContent = async (userInputData: any) => {
-    {
-      if (totalUsage >= 10000) {
-        alert(
-          "You have reached your limit of 10,000 credits. Please upgrade your plan to continue using the app."
-        );
-        router.push("/dashboard/billing");
-        return;
-      }
+    if (totalUsage >= 10000) {
+      alert(
+        "You have reached your limit of 10,000 credits. Please upgrade your plan to continue using the app."
+      );
+      router.push("/dashboard/billing");
+      return;
     }
+
     setIsLoading(true);
-    const SelectPrompt = selectedTemplate?.aiPrompt;
-    const FinalPrompt = JSON.stringify(userInputData) + ", " + SelectPrompt;
-    const result = await chatSession.sendMessage(FinalPrompt);
-    setAiOutput(result.response.text());
-    await saveDB(userInputData, selectedTemplate?.slug, result.response.text());
-    setIsLoading(false);
-    setUpdateCredit(Date.now());
+
+    try {
+      const SelectPrompt = selectedTemplate?.aiPrompt;
+      const FinalPrompt = JSON.stringify(userInputData) + ", " + SelectPrompt;
+      const result = await chatSession.sendMessage(FinalPrompt);
+      const aiResponseText = await result.response.text();
+
+      setAiOutput(aiResponseText);
+      await saveDB(userInputData, selectedTemplate?.slug, aiResponseText);
+
+      // Calculate and update the total usage
+      const newUsage = aiResponseText.length;
+      setTotalUsage((prevTotalUsage: any) => prevTotalUsage + newUsage);
+    } catch (error) {
+      console.error("Error generating AI content:", error);
+      alert("Failed to generate AI content. Please try again later.");
+    } finally {
+      setIsLoading(false);
+      setUpdateCredit(Date.now());
+    }
   };
 
   const saveDB = async (formData: any, slug: any, aiOutput: any) => {
-    // @ts-ignore
-    const data = await db.insert(AIOutput).values({
-      formData: formData,
-      templateSlug: slug,
-      aiResponse: aiOutput,
-      createdBy: user?.primaryEmailAddress?.emailAddress,
-      createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
-    });
+    try {
+      // @ts-ignore
+      await db.insert(AIOutput).values({
+        formData: formData,
+        templateSlug: slug,
+        aiResponse: aiOutput,
+        createdBy: user?.primaryEmailAddress?.emailAddress,
+        createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+      });
+    } catch (error) {
+      console.error("Error saving to the database:", error);
+    }
   };
 
   return (
