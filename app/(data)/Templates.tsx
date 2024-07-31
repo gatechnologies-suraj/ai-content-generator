@@ -344,48 +344,50 @@ export default  [
                 name: 'outline',
                 required:true
             },
-            {
-                "name": "Generate Email",
-                "desc": "AI Model to generate emails based on user input",
-                "icon": "https://cdn-icons-png.flaticon.com/128/6062/6062646.png",
-                "category": "Email",
-                "slug": "generate-email",
-                "aiPrompt": "Based on the user's input, generate a customized email in rich text editor format.",
-                "form": [
-                    {
-                        "label": "What is your email about?",
-                        "field": "input",
-                        "name": "emailSubject",
-                        "required": true
-                    },
-                    {
-                        "label": "What kind of business do you have?",
-                        "field": "input",
-                        "name": "businessType",
-                        "required": true
-                    },
-                    {
-                        "label": "What is this email exactly for?",
-                        "field": "input",
-                        "name": "emailPurpose",
-                        "required": true
-                    },
-                    {
-                        "label": "What kind of email is it?",
-                        "field": "input",
-                        "name": "emailType",
-                        "required": true
-                    },
-                    {
-                        "label": "How do you want your email to sound?",
-                        "field": "input",
-                        "name": "emailTone",
-                        "required": true
-                    }
-                ]
-            }
+           
           
            
         ]
+       
     },
+    {
+        "name": "Generate Email",
+        "desc": "AI Model to generate emails based on user input",
+        "icon": "https://cdn-icons-png.flaticon.com/128/6062/6062646.png",
+        "category": "Email",
+        "slug": "generate-email",
+        "aiPrompt": "Based on the user's input, generate a customized email in rich text editor format.",
+        "form": [
+            {
+                "label": "What is your email about?",
+                "field": "input",
+                "name": "emailSubject",
+                "required": true
+            },
+            {
+                "label": "What kind of business do you have?",
+                "field": "input",
+                "name": "businessType",
+                "required": true
+            },
+            {
+                "label": "What is this email exactly for?",
+                "field": "input",
+                "name": "emailPurpose",
+                "required": true
+            },
+            {
+                "label": "What kind of email is it?",
+                "field": "input",
+                "name": "emailType",
+                "required": true
+            },
+            {
+                "label": "How do you want your email to sound?",
+                "field": "input",
+                "name": "emailTone",
+                "required": true
+            }
+        ]
+    }
 ]
